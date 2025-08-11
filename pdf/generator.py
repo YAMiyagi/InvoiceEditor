@@ -22,7 +22,7 @@ class DocGenerator():
     def add_stroke(self, x:int, y:int, x2:int, y2:int, weight:int = 1):
         self.__canvas.setStrokeColor(black)
         self.__canvas.setLineWidth(weight)
-        self.__canvas.line(x, y, x2=x2, y2=y2)
+        self.__canvas.line(x, y, x2, y2)
     
     def get_string_width(self, text:str, font:str = "Arial", font_size:int = 13):
         return self.__canvas.stringWidth(text, font, font_size)

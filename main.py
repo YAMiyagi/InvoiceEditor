@@ -1,3 +1,3 @@
-from components.home.home import renderHome
+# from components.home.home import renderHome
 
-renderHome()
+# renderHome()

@@ -4,8 +4,8 @@ kp_title = [
     'Умуш Аскар'
 ]
 
-def createCommercailDoc(doc, data, signPath, propsIndex, loadJson, date, months):
-    props = loadJson('data\JSON\kpProps.json')['props'][propsIndex]
+def createCommercialDoc(doc, data, signPath, propsIndex, loadJson, date, months):
+    props = loadJson('data/JSON/kpProps.json')['props'][propsIndex]
     props = props.split("~")
     props.reverse()
     totalPrice = data["totalPrice"].get()
@@ -14,12 +14,12 @@ def createCommercailDoc(doc, data, signPath, propsIndex, loadJson, date, months)
         text_width = doc.get_string_width(text=str, font='Arial-Thick', font_size=9)
         right_margin = 595
         x = right_margin - text_width - 20
-        doc.add_string(x=x, y=720 + index * 15, text=str, font='Arial-Thick', font_size = 9)
+        doc.add_string(x, y=720 + index * 15, text=str, font='Arial-Thick', font_size = 9)
     
     doc.add_string(
         x=60, 
         y=670, 
-        text=f"Исходный документ №{data["docNum"].get()} от {date["currDay"]} {months[date["currMoth"] - 1]} {date["currYear"]}г.",
+        text=f"Исходный документ №{data['docNum'].get()} от {date['currDay']} {months[date['currMonth'] - 1]} {date['currYear']}г.",
         font_size=10
     )
     doc.add_string(x=185, y=620, text="Коммерческое предложение", font="Arial-Thick", font_size = 15)

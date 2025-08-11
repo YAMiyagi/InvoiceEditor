@@ -1,11 +1,11 @@
 from tkinter import filedialog as fd
-import subprocess
+import os
 import datetime
 import json
 import re
 
 from components.invoiceDoc.invoiceDoc import createInvoiceDoc
-from components.commercialOffer.commercialOffer import createCommercailDoc
+from components.commercialOffer.createCommercialDoc import createCommercialDoc
 from pdf.generator import DocGenerator
 
 months = ['января', 'февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря']
@@ -15,13 +15,10 @@ date = {
     'currMoth': int(datetime.date.today().month),
     'currYear': str(datetime.date.today().year)
 }
-signPath = ['data\img\sign_1.png', 'data\img\sign_2.png']
+signPath = ['data/img/sign_1.png', 'data/img/sign_2.png']
 
 def open_pdf(file_path):
-    try:
-        subprocess.run(file_path, shell=True, timeout=10)
-    except subprocess.TimeoutExpired:
-        print('Процесс не завершился в течение указанного времени.')
+    os.startfile(file_path)
 
 def load_json_file(path):
     with open(path,'r', encoding="utf-8") as file:
@@ -51,7 +48,7 @@ def createPDF(data,docName, docType):
     if docType == 0:
         createInvoiceDoc(**common_args)
     elif docType == 1:
-        createCommercailDoc(**common_args)
+        createCommercialDoc(**common_args)
         
         
     doc.save_page()
