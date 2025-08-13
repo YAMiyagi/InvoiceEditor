@@ -12,9 +12,19 @@ class DocGenerator():
     def __init__(self, path:str):
         self.__canvas = canvas.Canvas(f"{path}.pdf", pagesize=A4)
     
-    def add_string(self, x:int, y:int, text:str, font:str = "Arial", font_size:int = 13):
+    def add_text(self, x:int, y:int, text_area_width:int, text_align:str="left", text:str="", font:str = "Arial", font_size:int = 13):
+        text_x = x
+        match text_align:
+            case "left":
+                text_x += 10
+            case "center":
+                text_x += text_area_width / 2 - self.get_string_width(text, font, font_size) / 2
+            case "rigth":
+                text_x += text_area_width - 10
+                
+        
         self.__canvas.setFont(font, font_size)
-        self.__canvas.drawString(x, y, text)
+        self.__canvas.drawString(text_x, y, text)
     
     def add_image(self, path:str, x:int, y:int, width:int=200, height:int=150):
         self.__canvas.drawImage(path, x, y, width, height, mask="auto")
@@ -30,7 +40,13 @@ class DocGenerator():
         for i, row in enumerate(data):
             for j, cell in enumerate(row):
                 self.__canvas.rect(x + sum(col_widths[:j]), y - i * 15, col_widths[j], 15)
-                self.add_string(x + sum(col_widths[:j]) + col_widths[j] / 2 - pdfmetrics.stringWidth(cell, 'Arial', 10) / 2, y - i * 15 + 5, cell, font="Arial", font_size=10)
+                self.add_text(
+                    x + sum(col_widths[:j]),
+                    y - i * 15 + 5,
+                    text_area_width= col_widths[j],
+                    text_align= "center",
+                    text= cell, 
+                    font_size=10)
     
     def get_string_width(self, text:str, font:str = "Arial", font_size:int = 13):
         return self.__canvas.stringWidth(text, font, font_size)
