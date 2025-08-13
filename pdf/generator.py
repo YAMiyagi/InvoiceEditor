@@ -23,6 +23,14 @@ class DocGenerator():
         self.__canvas.setStrokeColor(black)
         self.__canvas.setLineWidth(weight)
         self.__canvas.line(x, y, x2, y2)
+        
+    def add_table(self, data:list, x:int, y:int, col_widths:list = None):
+        if col_widths is None:
+            col_widths = [100] * len(data[0])
+        for i, row in enumerate(data):
+            for j, cell in enumerate(row):
+                self.__canvas.rect(x + sum(col_widths[:j]), y - i * 15, col_widths[j], 15)
+                self.add_string(x + sum(col_widths[:j]) + col_widths[j] / 2 - pdfmetrics.stringWidth(cell, 'Arial', 10) / 2, y - i * 15 + 5, cell, font="Arial", font_size=10)
     
     def get_string_width(self, text:str, font:str = "Arial", font_size:int = 13):
         return self.__canvas.stringWidth(text, font, font_size)
