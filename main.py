@@ -1,11 +1,11 @@
-import pdfplumber
+import pdfplumber 
 import re
 import os
 from pdf.generator import DocGenerator 
 
 textData = ""
 tablesData = []
-with pdfplumber.open("naklad.pdf") as pdf:
+with pdfplumber.open("nakladLarge.pdf") as pdf:
     for page in pdf.pages:
         tablesData.append(page.extract_table())
         textData += page.extract_text()
