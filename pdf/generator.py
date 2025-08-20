@@ -33,7 +33,6 @@ class DocGenerator():
             test_line = (current_line + " " + word).strip() if current_line else word
             if pdfmetrics.stringWidth(test_line, font, font_size) > text_area_width:
                 if current_line:
-                    print(f"Drawing text: {current_line} at position ({text_x}, {y * line})")
                     self.__canvas.drawString(text_x, y - text_gap * line, current_line)
                     line += 1
                 current_line = word
@@ -52,20 +51,22 @@ class DocGenerator():
         self.__canvas.line(x, y, x2, y2)
         
     def add_table(self, data:list, x:int, y:int, col_widths:list = None):
+        y_offset = 0
         if col_widths is None:
             col_widths = [100] * len(data[0])
         for i, row in enumerate(data):
             height = 15 * math.ceil(pdfmetrics.stringWidth(row[2], 'Arial', 10) / col_widths[2])
+            print(y - y_offset)
             for j, cell in enumerate(row):
-                
-                self.__canvas.rect(x + sum(col_widths[:j]), y - i * 15, col_widths[j], height)
+                self.__canvas.rect(x + sum(col_widths[:j]), y - y_offset - height, col_widths[j], height)
                 self.add_text(
                     x + sum(col_widths[:j]),
-                    y - i * 15 + 5,
+                    y - y_offset - 10,
                     text_area_width= col_widths[j],
                     text_align= "center",
                     text= cell, 
                     font_size=10)
+            y_offset += height
     
     def get_string_width(self, text:str, font:str = "Arial", font_size:int = 13):
         return self.__canvas.stringWidth(text, font, font_size)
