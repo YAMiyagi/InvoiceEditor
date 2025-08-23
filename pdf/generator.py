@@ -13,32 +13,25 @@ pdfmetrics.registerFont(TTFont('Arial', 'data/fonts/arial.ttf'))
 class DocGenerator():
     def __init__(self, path:str):
         self.__canvas = canvas.Canvas(f"{path}.pdf", pagesize=A4)
+        self.current_page = 1
     
     def add_text(self, x:int, y:int, text_area_width:int, text_align:str="left", padding:int = 10, text_gap:int = 15, text:str="", font:str = "Arial", font_size:int = 13):
-        text_x = x
-        self.__canvas.setFont(font, font_size)
-        # match text_align:
-        #     case "left":
-        #         text_x += padding
-        #     case "center":
-        #         text_x += text_area_width / 2 - self.get_string_width(text, font, font_size) / 2
-        #     case "rigth":
-        #         text_x += text_area_width - padding
-                
+        self.__canvas.setFont(font, font_size)       
         words = text.split()
         line = 0
         current_line = ""
-
         for word in words:
             test_line = (current_line + " " + word).strip() if current_line else word
             if pdfmetrics.stringWidth(test_line, font, font_size) > text_area_width:
                 if current_line:
+                    text_x = self.align_text(x, current_line, text_area_width, text_align, font, font_size, padding)
                     self.__canvas.drawString(text_x, y - text_gap * line, current_line)
                     line += 1
                 current_line = word
             else:
                 current_line = test_line
         if current_line:
+            text_x = self.align_text(x, current_line, text_area_width, text_align, font, font_size, padding)
             self.__canvas.drawString(text_x, y - text_gap * line, current_line)
 
     
@@ -49,27 +42,36 @@ class DocGenerator():
         self.__canvas.setStrokeColor(black)
         self.__canvas.setLineWidth(weight)
         self.__canvas.line(x, y, x2, y2)
+    
+    def align_text(self,x:int, text:str, width:int,text_align:str = "left", font:str = "Arial", font_size:int = 10, padding:int = 10):
+        match text_align:
+            case "left":
+                x += padding
+            case "center":
+                x += width / 2 - pdfmetrics.stringWidth(text, font, font_size) / 2
+            case "rigth":
+                x += width - padding
+        return x
         
-    def add_table(self, data:list, x:int, y:int, col_widths:list = None):
+    def add_table(self, data:list, x:int, y:int, col_widths:list = None,rect_height:int = 15, font:str = "Arial", font_size:int = 10):
         y_offset = 0
         if col_widths is None:
             col_widths = [100] * len(data[0])
-        for i, row in enumerate(data):
-            height = 15 * math.ceil(pdfmetrics.stringWidth(row[2], 'Arial', 10) / col_widths[2])
-            print(y - y_offset)
+        for row in data:
+            height = rect_height * math.ceil(pdfmetrics.stringWidth(row[2], font, font_size) / (col_widths[2] - font_size))
+            if y - y_offset - height < 40: self.current_page += 1; self.__canvas.showPage(); y_offset = 0; y = 800
             for j, cell in enumerate(row):
                 self.__canvas.rect(x + sum(col_widths[:j]), y - y_offset - height, col_widths[j], height)
                 self.add_text(
                     x + sum(col_widths[:j]),
-                    y - y_offset - 10,
+                    y - y_offset - font_size,
                     text_area_width= col_widths[j],
                     text_align= "center",
                     text= cell, 
-                    font_size=10)
+                    font=font,
+                    font_size=font_size,
+                    text_gap= 10)
             y_offset += height
-    
-    def get_string_width(self, text:str, font:str = "Arial", font_size:int = 13):
-        return self.__canvas.stringWidth(text, font, font_size)
     
     def save_page(self):
         self.__canvas.save()

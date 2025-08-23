@@ -11,14 +11,19 @@ with pdfplumber.open("nakladLarge.pdf") as pdf:
         textData += page.extract_text()
 invoice_num = re.search(r'НАКЛАДНАЯ №(\d+)', textData).group(1)
 buyer = re.search(r'ПОКУПАТЕЛЬ\s*(.+?)\s*________________', textData).group(1).strip()
-
+tablesData = sum(tablesData, [])
 def open_pdf(file_path):
     os.startfile(file_path)
 
 def createPDF():
     path = "pdfgenerated"
     doc = DocGenerator(path=path)
-    doc.add_table(data=tablesData[0], x=50, y=750, col_widths=[30, 100, 200, 30, 70, 70])
+    doc.add_table(data=tablesData,
+                  x=50,
+                  y=550,
+                  col_widths=[30, 100, 200, 30, 70, 70],
+                  rect_height=11,
+                  font_size=8)
     
     
     doc.save_page()
