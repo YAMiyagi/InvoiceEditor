@@ -53,26 +53,63 @@ class DocGenerator():
                 x += width - padding
         return x
         
-    def add_table(self, data:list, x:int, y:int, col_widths:list = None,rect_height:int = 15, font:str = "Arial", font_size:int = 10):
+    def add_product_table(self, data:list, x:int, y:int, col_widths:list = None,rect_height:int = 15, font:str = "Arial", font_size:int = 10, summ:str = "", qty:str = ""):
+        thick_font = "Arial-Thick"
         y_offset = 0
+        height = 0
         if col_widths is None:
             col_widths = [100] * len(data[0])
         for row in data:
             height = rect_height * math.ceil(pdfmetrics.stringWidth(row[2], font, font_size) / (col_widths[2] - font_size))
             if y - y_offset - height < 40: self.current_page += 1; self.__canvas.showPage(); y_offset = 0; y = 800
             for j, cell in enumerate(row):
-                self.__canvas.rect(x + sum(col_widths[:j]), y - y_offset - height, col_widths[j], height)
-                self.add_text(
+                self.add_table(
                     x + sum(col_widths[:j]),
-                    y - y_offset - font_size,
-                    text_area_width= col_widths[j],
+                    y - y_offset,
+                    width=col_widths[j],
+                    height=height,
+                    text=cell,
+                    font=font,
+                    font_size=font_size,
+                )
+            y_offset += height
+        self.add_table(
+            x + sum(col_widths[:3]),
+            y - y_offset,
+            width=col_widths[3],
+            text=qty,
+            font=thick_font,
+            font_size=font_size
+        )
+        self.add_table(
+            x + sum(col_widths[:-1]),
+            y - y_offset,
+            width=col_widths[-1],
+            text=summ,
+            font=thick_font,
+            font_size=font_size,
+        )
+        self.add_text(
+            x + sum(col_widths[:2]) - 30,
+            y - y_offset - 10,
+            text_area_width= col_widths[2],
+            text_align= "rigth",
+            text= "ИТОГО:" ,
+            font=thick_font,
+            font_size=font_size,
+        )
+
+    def add_table(self, x:int, y:int, width:int, height:int = 15, text:str="", font:str = "Arial", font_size:int = 10):
+        self.__canvas.rect(x, y - height, width, height)
+        self.add_text(
+                    x,
+                    y - font_size,
+                    text_area_width= width,
                     text_align= "center",
-                    text= cell, 
+                    text= text, 
                     font=font,
                     font_size=font_size,
                     text_gap= 10)
-            y_offset += height
-    
     def save_page(self):
         self.__canvas.save()
         

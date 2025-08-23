@@ -5,9 +5,8 @@ from pdf.generator import DocGenerator
 
 textData = ""
 tablesData = []
-with pdfplumber.open("naklad.pdf") as pdf:
+with pdfplumber.open("nakladLarge.pdf") as pdf:
     for page in pdf.pages:
-        print(page.extract_table())
         tablesData.append(page.extract_table())
         textData += page.extract_text()
 invoice_num = re.search(r'НАКЛАДНАЯ №(\d+)', textData).group(1)
@@ -25,19 +24,21 @@ def open_pdf(file_path):
 def createPDF():
     path = "pdfgenerated"
     doc = DocGenerator(path=path)
-    doc.add_table(data=[["№", "КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"]],
-                  x=50,
-                  y=568,
-                  col_widths=[30, 100, 200, 30, 70, 70],
-                  rect_height=13,
-                  font="Arial-Thick",
-                  font_size=10)
-    doc.add_table(data=tablesData,
+    # doc.add_product_table(data=[["№", "КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"]],
+    #               x=50,
+    #               y=568,
+    #               col_widths=[30, 100, 200, 30, 70, 70],
+    #               rect_height=13,
+    #               font="Arial-Thick",
+    #               font_size=10)
+    doc.add_product_table(data=tablesData,
                   x=50,
                   y=550,
                   col_widths=[30, 100, 200, 30, 70, 70],
                   rect_height=11,
-                  font_size=8)
+                  font_size=8,
+                  summ=summ,
+                  qty=qty)
     
     
     doc.save_page()
@@ -45,5 +46,6 @@ def createPDF():
     os.startfile(path + ".pdf")
     
 createPDF()
+
     
     
