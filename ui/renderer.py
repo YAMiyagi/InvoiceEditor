@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import ttk 
+from tkinter import ttk
+from tkinter import filedialog
+import pdfplumber 
 class RenderUI():
     def __init__(self, title: str, geometry: str, gap:int = 5):
         self.__root = tk.Tk()
@@ -28,10 +30,12 @@ class RenderUI():
         btn = ttk.Button(self.__frames[frameKey], text=text, command=onClick)
         btn.grid(row=row, column=col, padx=self.__gap, pady=self.__gap)
         
-    def add_input(self, frameKey:str, text:str, row:int, col:int, isNum: bool = False):
+    def add_input(self, frameKey:str, text:str, row:int, col:int, isNum: bool = False, text_var = None):
+        
         self._check_frame_key(frameKey)
         self.add_label(frameKey, text, row, col)
         entry = ttk.Entry(self.__frames[frameKey])
+        entry.insert(0, text_var if text_var else "")
         entry.bind("<Key>", self._on_key_release)
         entry.grid(row=row, column=col + 1, padx=self.__gap, pady=self.__gap, sticky="ew")
         
@@ -56,6 +60,24 @@ class RenderUI():
     def add_label(self, frameKey: str, text: str, row: int, col: int):
         ttk.Label(self.__frames[frameKey], text=text).grid(row=row, column=col, sticky="e", padx=self.__gap, pady=self.__gap)
 
+    def choose_file(self):
+        file_path = ""
+        file_path = filedialog.askopenfilename(
+            title="Выберите файл",
+            filetypes=[("PDF файлы", "*.pdf")]
+        )
+        if file_path != "":
+            tablesData = []
+            textData = ""
+            with pdfplumber.open(f"{file_path}") as pdf:
+                for page in pdf.pages:
+                    tablesData.append(page.extract_table())
+                    textData += page.extract_text()
+            tablesData = sum(tablesData, [])
+            return tablesData, textData
+        
+
+    
     def _check_frame_key(self, framekey:str):
         if framekey not in self.__frames:
             raise ValueError(f"Frame '{framekey}' not found")

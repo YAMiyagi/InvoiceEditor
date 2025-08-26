@@ -12,7 +12,7 @@ months = ['января', 'февраля','марта','апреля','мая',
 
 date = {
     'currDay': str(datetime.date.today().day),
-    'currMoth': int(datetime.date.today().month),
+    'currMonth': int(datetime.date.today().month),
     'currYear': str(datetime.date.today().year)
 }
 signPath = ['data/img/sign_1.png', 'data/img/sign_2.png']
@@ -25,16 +25,19 @@ def load_json_file(path):
         return json.load(file)
 
 def nameFile(data, docName):
-    string = f"{docName} {data["docRequisite"].get()} {data["clientName"].get()} {data["docNum"].get()}"
+    string = f"{docName} {data["docRequisite"].get()} {data["clientName"].get()} {data["docNum"]}"
     cleaned_string = re.sub(r'[/\\"\'!@#$%^&*|+=,.:;?<>\-«»\n]', "", string)
     cleaned_string = cleaned_string.replace(" ", "_")
     return cleaned_string
 
-def createPDF(data,docName, docType):
+def createPDF(data,docName, docType, tablesData, textData):
     path = f"{fd.askdirectory()}/{nameFile(data=data, docName=docName[docType])}"
     doc = DocGenerator(path=path)
     propsIndex = int(data["docRequisite"].current())
-    
+    total = re.search(r"ИТОГО:\s*([\d\s,]+)", textData).group(1).strip()
+    if total:
+        qty, summ = total.split(" ", 1)
+        summ = summ[:-3].replace(" ", "")
     common_args={
         "doc":doc,
         "data":data,
@@ -42,14 +45,17 @@ def createPDF(data,docName, docType):
         "propsIndex":propsIndex,
         "loadJson":load_json_file,
         "date":date,
-        "months":months
+        "months":months,
+        "qty":qty,
+        "summ":summ,
+        "tablesData":tablesData
     }
     
     if docType == 0:
         createInvoiceDoc(**common_args)
     elif docType == 1:
         createCommercialDoc(**common_args)
-        
+    
         
     doc.save_page()
     doc.show_page()
