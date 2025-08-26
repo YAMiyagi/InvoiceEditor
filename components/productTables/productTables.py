@@ -10,7 +10,7 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
         col_widths=[30, 100, 200, 30, 70, 70]
         y_offset = 0
         height = 0
-        print("table")
+        tablesData.insert(0,["№","КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"])
         if col_widths is None:
             col_widths = [100] * len(tablesData[0])
         for row in tablesData:
