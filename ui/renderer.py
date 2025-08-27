@@ -74,6 +74,7 @@ class RenderUI():
                     tablesData.append(page.extract_table())
                     textData += page.extract_text()
             tablesData = sum(tablesData, [])
+            tablesData.insert(0,["№","КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"])
             return tablesData, textData
         
 

@@ -1,3 +1,11 @@
-totalPrice = "8900,99"
+import pdfplumber 
 
-print(totalPrice[:-3])
+tablesData = []
+textData = ""
+with pdfplumber.open(f"naklad.pdf") as pdf:
+    for page in pdf.pages:
+        tablesData.append(page.extract_table())
+        textData += page.extract_text()
+        
+print(tablesData)
+print(textData)
