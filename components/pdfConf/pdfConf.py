@@ -25,7 +25,7 @@ def load_json_file(path):
         return json.load(file)
 
 def nameFile(data, docName):
-    string = f"{docName} {data["docRequisite"].get()} {data["clientName"].get()} {data["docNum"]}"
+    string = f'{docName} {data["docRequisite"].get()} {data["clientName"].get()} {data["docNum"]}'
     cleaned_string = re.sub(r'[/\\"\'!@#$%^&*|+=,.:;?<>\-«»\n]', "", string)
     cleaned_string = cleaned_string.replace(" ", "_")
     return cleaned_string

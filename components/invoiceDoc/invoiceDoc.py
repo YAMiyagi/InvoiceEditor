@@ -15,7 +15,7 @@ def createInvoiceDoc(doc, data, signPath, propsIndex, loadJson, date, months, qt
     doc.add_text(
         x=60, 
         y=800, 
-        text=f"Счет на оплату №{data["docNum"]} от {date["currDay"]} {months[date["currMonth"] - 1]} {date["currYear"]}г.",
+        text=f'Счет на оплату №{data["docNum"]} от {date["currDay"]} {months[date["currMonth"] - 1]} {date["currYear"]}г.',
         font="Arial-Thick"
     )
     doc.add_text(x=60, y=598, text="Покупатель")
