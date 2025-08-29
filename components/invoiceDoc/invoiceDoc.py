@@ -27,7 +27,7 @@ def createInvoiceDoc(doc, data, signPath, propsIndex, loadJson, date, months, qt
     add_product_tables(doc, tablesData=tablesData, qty=qty, summ=summ)
     
     doc.add_text(x=80, y=170, text=f'Всего наименованний {qty}, на сумму {summ} сом')
-    doc.add_text(x=80, y=150, text=f'{convertNum2Words(summ)} сом')
+    doc.add_text(x=80, y=150, text=f'{convertNum2Words(summ[:-3].replace(" ", ""))} сом')
     doc.add_text(x=80, y=70, text='Руководитель')
     doc.add_text(x=430, y=70, text='Бухгалтер')
     

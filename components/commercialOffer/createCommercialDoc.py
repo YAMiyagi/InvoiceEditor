@@ -32,7 +32,7 @@ def createCommercialDoc(doc, data, signPath, propsIndex, loadJson, date, months,
     add_product_tables(doc, y=500, tablesData=tablesData, qty=qty, summ=summ)
     
     doc.add_text(x=80, y=170, text=f'Итого настоящего коммерческого предложения составило: {summ} сом')
-    doc.add_text(x=80, y=150, text=f'{convertNum2Words(summ)} сом')
+    doc.add_text(x=80, y=150, text=f'{convertNum2Words(summ[:-3].replace(" ", ""))} сом')
     doc.add_text(x=90, y=70, text="С уважением", font_size=11)
     doc.add_text(x=90, y=55, text=kp_title[propsIndex], font_size=11)
     

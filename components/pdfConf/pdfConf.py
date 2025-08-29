@@ -37,7 +37,6 @@ def createPDF(data,docName, docType, tablesData, textData):
     total = re.search(r"ИТОГО:\s*([\d\s,]+)", textData).group(1).strip()
     if total:
         qty, summ = total.split(" ", 1)
-        summ = summ[:-3].replace(" ", "")
     common_args={
         "doc":doc,
         "data":data,

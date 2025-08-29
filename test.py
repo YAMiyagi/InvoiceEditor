@@ -7,5 +7,3 @@ with pdfplumber.open(f"naklad.pdf") as pdf:
         tablesData.append(page.extract_table())
         textData += page.extract_text()
         
-print(tablesData)
-print(textData)
