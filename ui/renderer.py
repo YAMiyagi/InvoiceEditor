@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 import pdfplumber 
+import re
 class RenderUI():
     def __init__(self, title: str, geometry: str, gap:int = 5):
         self.__root = tk.Tk()
@@ -73,7 +74,13 @@ class RenderUI():
                 for page in pdf.pages:
                     tablesData.append(page.extract_table())
                     textData += page.extract_text()
-            tablesData = sum(tablesData, [])
+            if len(tablesData) > 1:
+                tablesData = sum(tablesData, [])         
+            else: 
+                pattern = r"^\s*(\d+)\s+(\S+)\s+(.+?)\s+(\d+)\s+(\d+)\s+(\d+)\s*$"
+                matches = re.findall(pattern, textData, re.MULTILINE)
+                tablesData = [list(matches[0])]
+                
             tablesData.insert(0,["№","КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"])
             return tablesData, textData
         
