@@ -30,7 +30,7 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
             x + sum(col_widths[:3]),
             y - y_offset - 4,
             width=col_widths[3],
-            height=height,
+            height=rect_height,
             text=qty,
             font=thick_font,
             font_size=9,
@@ -39,10 +39,10 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
             x + sum(col_widths[:-1]),
             y - y_offset - 4,
             width=col_widths[-1],
-            height=height,
+            height=rect_height,
             text=summ,
             font=thick_font,
-            font_size=9,
+            font_size=font_size,
         )
         doc.add_text(
             x + sum(col_widths[:2]) - 30,
@@ -51,5 +51,5 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
             text_align= "rigth",
             text= "ИТОГО:" ,
             font=thick_font,
-            font_size=9,
+            font_size=font_size,
         )
