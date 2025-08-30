@@ -74,7 +74,7 @@ class RenderUI():
                 for page in pdf.pages:
                     tablesData.append(page.extract_table())
                     textData += page.extract_text()
-            if len(tablesData) > 1:
+            if len(tablesData[0]) > 1:
                 tablesData = sum(tablesData, [])         
             else: 
                 pattern = r"^\s*(\d+)\s+(\S+)\s+(.+?)\s+(\d+)\s+(\d+)\s+(\d+)\s*$"
