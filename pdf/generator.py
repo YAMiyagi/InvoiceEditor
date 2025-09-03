@@ -53,7 +53,7 @@ class DocGenerator():
                 x += width - padding
         return x
 
-    def add_table(self, x:int, y:int, width:int, height:int = 15, text:str="", font:str = "Arial", font_size:int = 10, text_gap:int = 10, text_align:str = "center", paddingY:int = 0):
+    def add_table(self, x:int, y:int, width:int, height:int = 15, text:str="", font:str = "Arial", font_size:int = 10, text_gap:int = 10, text_align:str = "center"):
         self.__canvas.setLineWidth(1)
         self.__canvas.rect(x, y - height, width, height)
         self.add_text(

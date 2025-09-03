@@ -30,13 +30,10 @@ def nameFile(data, docName):
     cleaned_string = cleaned_string.replace(" ", "_")
     return cleaned_string
 
-def createPDF(data,docName, docType, tablesData, textData):
+def createPDF(data,docName, docType, tablesData, invoiceData):
     path = f"{fd.askdirectory()}/{nameFile(data=data, docName=docName[docType])}"
     doc = DocGenerator(path=path)
     propsIndex = int(data["docRequisite"].current())
-    total = re.search(r"ИТОГО:\s*([\d\s,]+)", textData).group(1).strip()
-    if total:
-        qty, summ = total.split(" ", 1)
     common_args={
         "doc":doc,
         "data":data,
@@ -45,8 +42,8 @@ def createPDF(data,docName, docType, tablesData, textData):
         "loadJson":load_json_file,
         "date":date,
         "months":months,
-        "qty":qty,
-        "summ":summ,
+        "qty":invoiceData["qty"],
+        "summ":invoiceData["summ"],
         "tablesData":tablesData
     }
     

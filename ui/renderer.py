@@ -31,11 +31,11 @@ class RenderUI():
         btn = ttk.Button(self.__frames[frameKey], text=text, command=onClick)
         btn.grid(row=row, column=col, padx=self.__gap, pady=self.__gap)
         
-    def add_input(self, frameKey:str, text:str, row:int, col:int, isNum: bool = False, text_var = None):
+    def add_input(self, frameKey:str, text:str, row:int, col:int, isNum: bool = False, text_var = None, width: int = 30):
         
         self._check_frame_key(frameKey)
         self.add_label(frameKey, text, row, col)
-        entry = ttk.Entry(self.__frames[frameKey])
+        entry = ttk.Entry(self.__frames[frameKey], width=width)
         entry.insert(0, text_var if text_var else "")
         entry.bind("<Key>", self._on_key_release)
         entry.grid(row=row, column=col + 1, padx=self.__gap, pady=self.__gap, sticky="ew")
@@ -44,10 +44,10 @@ class RenderUI():
             self._validate_numeric_input(entry)
         return entry
         
-    def add_combobox(self,frameKey:str, text:str, props, row:int, col:int):
+    def add_combobox(self,frameKey:str, text:str, props, row:int, col:int, width: int = 30):
         self._check_frame_key(frameKey)
         self.add_label(frameKey, text, row, col)
-        combo = ttk.Combobox(self.__frames[frameKey], values = props, state="readonly")
+        combo = ttk.Combobox(self.__frames[frameKey], values = props, state="readonly", width=width)
         combo.grid(row=row, column=col + 1, padx=self.__gap, pady=self.__gap)
         return combo
     
@@ -74,15 +74,24 @@ class RenderUI():
                 for page in pdf.pages:
                     tablesData.append(page.extract_table())
                     textData += page.extract_text()
+            
+            total = re.search(r"ИТОГО:\s*([\d\s,]+)", textData).group(1).strip()
+            invoiceData = {
+                "invoice_num": re.search(r'НАКЛАДНАЯ №(\d+)', textData).group(1),
+                "buyer": re.search(r'ПОКУПАТЕЛЬ\s*(.+?)\s*________________', textData).group(1).strip(),
+                "qty": total.split(" ", 1)[0],
+                "summ": total.split(" ", 1)[1][:-3].replace(" ", ""),
+            }
+            
             if len(tablesData[0]) > 1:
                 tablesData = sum(tablesData, [])         
             else: 
-                pattern = r"^\s*(\d+)\s+(\S+)\s+(.+?)\s+(\d+)\s+(\d+)\s+(\d+)\s*$"
-                matches = re.findall(pattern, textData, re.MULTILINE)
-                tablesData = [list(matches[0])]
-                
+                print(textData)
+                tablesData = [["1","","То sвар",invoiceData["qty"],str(int(invoiceData["summ"]) / int(invoiceData["qty"]))[: -2],invoiceData["summ"]]]
+            
+            
             tablesData.insert(0,["№","КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"])
-            return tablesData, textData
+            return tablesData, invoiceData
         
 
     

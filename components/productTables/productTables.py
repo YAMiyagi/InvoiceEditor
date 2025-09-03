@@ -40,7 +40,7 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
             y - y_offset - 4,
             width=col_widths[-1],
             height=rect_height,
-            text=summ,
+            text=f"{summ},00",
             font=thick_font,
             font_size=font_size,
         )
@@ -53,3 +53,4 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
             font=thick_font,
             font_size=font_size,
         )
+        if y - y_offset - height < 200: doc.current_page += 1; doc.show_page()
