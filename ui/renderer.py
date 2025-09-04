@@ -70,26 +70,27 @@ class RenderUI():
         if file_path != "":
             tablesData = []
             textData = ""
+            isMultiTable = True
             with pdfplumber.open(f"{file_path}") as pdf:
                 for page in pdf.pages:
                     tablesData.append(page.extract_table())
                     textData += page.extract_text()
             
             total = re.search(r"ИТОГО:\s*([\d\s,]+)", textData).group(1).strip()
+            
+            
+            if len(tablesData[0]) > 1:
+                tablesData = sum(tablesData, []) 
+                isMultiTable = True        
+            else: isMultiTable = False
+                
             invoiceData = {
                 "invoice_num": re.search(r'НАКЛАДНАЯ №(\d+)', textData).group(1),
                 "buyer": re.search(r'ПОКУПАТЕЛЬ\s*(.+?)\s*________________', textData).group(1).strip(),
                 "qty": total.split(" ", 1)[0],
                 "summ": total.split(" ", 1)[1][:-3].replace(" ", ""),
+                "isMultiTable": isMultiTable  
             }
-            
-            if len(tablesData[0]) > 1:
-                tablesData = sum(tablesData, [])         
-            else: 
-                print(textData)
-                tablesData = [["1","","То sвар",invoiceData["qty"],str(int(invoiceData["summ"]) / int(invoiceData["qty"]))[: -2],invoiceData["summ"]]]
-            
-            
             tablesData.insert(0,["№","КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"])
             return tablesData, invoiceData
         

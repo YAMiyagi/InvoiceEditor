@@ -44,6 +44,7 @@ def createPDF(data,docName, docType, tablesData, invoiceData):
         "months":months,
         "qty":invoiceData["qty"],
         "summ":invoiceData["summ"],
+        "isMultiTable": invoiceData["isMultiTable"],
         "tablesData":tablesData
     }
     
