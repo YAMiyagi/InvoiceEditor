@@ -80,7 +80,8 @@ class RenderUI():
             
             
             if len(tablesData[0]) > 1:
-                tablesData = sum(tablesData, []) 
+                tablesData = sum(tablesData, [])
+                tablesData.insert(0,["№","КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"])
                 isMultiTable = True        
             else: isMultiTable = False
                 
@@ -91,7 +92,7 @@ class RenderUI():
                 "summ": total.split(" ", 1)[1][:-3].replace(" ", ""),
                 "isMultiTable": isMultiTable  
             }
-            tablesData.insert(0,["№","КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"])
+            
             return tablesData, invoiceData
         
 
