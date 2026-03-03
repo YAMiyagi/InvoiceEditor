@@ -5,7 +5,7 @@ import pdfplumber
 import re
 
 
-windowSize = "400x700"
+windowSize = "500x700"
 requisites = ["ИП Алапаев","Эмин и Ко"]
 
 def renderCommercialForm(form, docType):
