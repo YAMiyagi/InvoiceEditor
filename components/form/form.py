@@ -12,7 +12,7 @@ def renderCommercialForm(form, docType):
     frameKey = "CommercialForm"
     form.add_label_frame(frameKey, docType, 0,1)
     formData = {
-        "offer" : form.add_input(frameKey, "Предложение",0,0),
+        "offer" : form.add_input(frameKey, "Предложение по реализации",0,0),
     }
     return formData
 
