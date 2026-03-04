@@ -63,11 +63,12 @@ def renderCommonForm(docName, docType):
     formData = {
         "docRequisite": form.add_combobox(frameKey,"Реквизит",requisites, 0,0),
         "clientName" : form.add_input(frameKey, "Имя клиента",1,0, text_var=invoiceData["buyer"]),
-        "isPrint": form.add_checkbox(frameKey, "Поставить печать", 4, 1, True),
+        "tax": form.add_input(frameKey,"Налог %",4, 0,isNum=True, text_var=0, width=15),
+        "isPrint": form.add_checkbox(frameKey, "Поставить печать", 5, 1, True),
         "docNum": invoiceData["invoice_num"],
     }
     if docType == 1: formData = formData | renderCommercialForm(form, docName[docType])
-    form.add_button(frameKey, "СОЗДАТЬ", lambda: createPDF(formData,docName, docType, tablesData, invoiceData), 5,1)
+    form.add_button(frameKey, "СОЗДАТЬ", lambda: createPDF(formData,docName, docType, tablesData, invoiceData), 6,1)
     
 
     
