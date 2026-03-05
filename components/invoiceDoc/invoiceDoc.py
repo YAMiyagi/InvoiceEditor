@@ -8,6 +8,7 @@ def createInvoiceDoc(doc, data, signPath, propsIndex, loadJson, date, months, qt
     props = loadJson('data\JSON\props.json')['props'][propsIndex]
     props = props.split("~")
     props.reverse()
+    taxAmount = data["tax"].get()
     
     for index, str in enumerate(props):
         doc.add_text(x=150, y=640 + index * 18, text=str, font="Arial-Thick")
@@ -25,7 +26,7 @@ def createInvoiceDoc(doc, data, signPath, propsIndex, loadJson, date, months, qt
     doc.add_stroke(x=50, y=790, x2=550, y2=790, weight=3)
     
     if isMultiTable: add_product_tables(doc, tablesData=tablesData, qty=qty, summ=summ)
-    taxSumm = round(float(data["tax"].get()) / 100.0 * float(summ))
+    taxSumm = round(float(taxAmount) / 100.0 * float(summ)) if len(taxAmount) > 0 else 0
     doc.add_text(x=80, y=170, text=f'Всего наименованний {qty}, на сумму {int(summ) + taxSumm} сом')
     doc.add_text(x=80, y=150, text=f'{convertNum2Words(int(summ) + taxSumm)} сом')
     doc.add_text(x=80, y=70, text='Руководитель')
