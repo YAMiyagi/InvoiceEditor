@@ -34,7 +34,7 @@ def createCommercialDoc(doc, data, signPath, propsIndex, loadJson, date, months,
     if isMultiTable: add_product_tables(doc, y=500, tablesData=tablesData, qty=qty, summ=summ)
     taxSumm = round(float(taxAmount) / 100.0 * float(summ)) if len(taxAmount) > 0 else 0
     doc.add_text(x=80, y=170, text=f'Итого настоящего коммерческого предложения составило: {int(summ) + taxSumm} сом')
-    doc.add_text(x=80, y=150, text=f'{convertNum2Words(int(summ) + taxSumm)} сом')
+    doc.add_text(x=80, y=150, text=f'({convertNum2Words(int(summ) + taxSumm)}) сом')
     doc.add_text(x=90, y=70, text="С уважением", font_size=11)
     doc.add_text(x=90, y=55, text=kp_title[propsIndex], font_size=11)
     
