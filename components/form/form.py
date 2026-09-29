@@ -27,27 +27,22 @@ def choose_file():
         if file_path != "":
             tablesData = []
             textData = ""
-            isMultiTable = True
             with pdfplumber.open(f"{file_path}") as pdf:
-                for page in pdf.pages:
-                    tablesData.append(page.extract_table())
+                for i, page in enumerate(pdf.pages):
+                    table = page.extract_table()
+                    tablesData.append(table)
+                    for row in tablesData[i]:
+                        value, rest = row[2].split(" ", 1)
+                        row[3] = value
+                        row[2] = rest
                     textData += page.extract_text()
-            
             total = re.search(r"ИТОГО:\s*([\d\s,]+)", textData).group(1).strip()
-            
-            
-            if len(tablesData[0]) > 1:
-                tablesData = sum(tablesData, [])
-                tablesData.insert(0,["№","КАТЕГОРИЯ","ПАРАМЕТРЫ","КОЛ","ЦЕНА","СУММА"])
-                isMultiTable = True        
-            else: isMultiTable = False
-                
+
             invoiceData = {
-                "invoice_num": re.search(r'НАКЛАДНАЯ №(\d+)', textData).group(1),
+                "invoice_num": re.search(r'\*(\d+)', textData).group(1),
                 "buyer": re.search(r'ПОКУПАТЕЛЬ\s*(.+?)\s*________________', textData).group(1).strip(),
                 "qty": total.split(" ", 1)[0],
-                "summ": total.split(" ", 1)[1][:-3].replace(" ", ""),
-                "isMultiTable": isMultiTable  
+                "summ": total.split(" ", 1)[1][:-3].replace(" ", ""), 
             }
             
             return tablesData, invoiceData

@@ -1,6 +1,5 @@
 import math
 from reportlab.pdfbase import pdfmetrics
-import re
 
 
 

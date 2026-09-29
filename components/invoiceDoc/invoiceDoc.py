@@ -4,8 +4,8 @@ from components.productTables.productTables import add_product_tables
 
 
 
-def createInvoiceDoc(doc, data, signPath, propsIndex, loadJson, date, months, qty, summ,tablesData, isMultiTable):
-    props = loadJson('data\JSON\props.json')['props'][propsIndex]
+def createInvoiceDoc(doc, data, signPath, propsIndex, loadJson, date, months, qty, summ,tablesData):
+    props = loadJson('data/JSON/props.json')['props'][propsIndex]
     props = props.split("~")
     props.reverse()
     taxAmount = data["tax"].get()
@@ -25,7 +25,7 @@ def createInvoiceDoc(doc, data, signPath, propsIndex, loadJson, date, months, qt
     doc.add_text(x=150, y=598, text=data["clientName"].get(), font="Arial-Thick")
     doc.add_stroke(x=50, y=790, x2=550, y2=790, weight=3)
     
-    if isMultiTable: add_product_tables(doc, tablesData=tablesData, qty=qty, summ=summ)
+    add_product_tables(doc, tablesData=tablesData, qty=qty, summ=summ)
     taxSumm = round(float(taxAmount) / 100.0 * float(summ)) if len(taxAmount) > 0 else 0
     doc.add_text(x=80, y=170, text=f'Всего наименованний {qty}, на сумму {int(summ) + taxSumm} сом')
     doc.add_text(x=80, y=150, text=f'{convertNum2Words(int(summ) + taxSumm)} сом')
