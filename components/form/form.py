@@ -42,9 +42,9 @@ def choose_file():
                 "invoice_num": re.search(r'\*(\d+)', textData).group(1),
                 "buyer": re.search(r'ПОКУПАТЕЛЬ\s*(.+?)\s*________________', textData).group(1).strip(),
                 "qty": total.split(" ", 1)[0],
-                "summ": total.split(" ", 1)[1][:-3].replace(" ", ""), 
+                "summ": total.split(" ", 1)[1], 
             }
-            
+            print(invoiceData)
             return tablesData, invoiceData
     
 def renderCommonForm(docName, docType):

@@ -12,7 +12,9 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
         if col_widths is None:
             col_widths = [100] * len(tablesData[0])
         for i, row in enumerate(tablesData):
-            height = rect_height * math.ceil(pdfmetrics.stringWidth(row[2], font, font_size) / (col_widths[2] - (rect_height + font_size + 10)))
+            print("row = ", row[i][1])
+            print("col-width =", col_widths)
+            height = rect_height * math.ceil(pdfmetrics.stringWidth(row[i][1], font, font_size) / (col_widths[2] - (rect_height + font_size + 10)))
             print(f"y - y_offset - height = {y - y_offset - height}")
             if y - y_offset - height < 20: doc.current_page += 1; doc.show_page(); y_offset = 0; y = 800
             for j, cell in enumerate(row):
