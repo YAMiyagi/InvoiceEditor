@@ -28,23 +28,21 @@ def choose_file():
             tablesData = []
             textData = ""
             with pdfplumber.open(f"{file_path}") as pdf:
-                for i, page in enumerate(pdf.pages):
+                for page in pdf.pages:
                     table = page.extract_table()
                     tablesData.append(table)
-                    for row in tablesData[i]:
-                        value, rest = row[2].split(" ", 1)
-                        row[3] = value
-                        row[2] = rest
                     textData += page.extract_text()
-            total = re.search(r"ИТОГО:\s*([\d\s,]+)", textData).group(1).strip()
-
+            tablesData[0][0][-1] = "Сумма"
+            tablesData[0][0][-2] = "Цена"
+            total = tablesData[len(tablesData) -1][-1]
+            del tablesData[0][-1]
+            buyer = re.search(r"Покупатель:\s*(.+)", textData).group(1).strip()
             invoiceData = {
                 "invoice_num": re.search(r'\*(\d+)', textData).group(1),
-                "buyer": re.search(r'ПОКУПАТЕЛЬ\s*(.+?)\s*________________', textData).group(1).strip(),
-                "qty": total.split(" ", 1)[0],
-                "summ": total.split(" ", 1)[1], 
+                "buyer": buyer if buyer[0] != "№" else " ",
+                "qty": total[2],
+                "sum": total[4],
             }
-            print(invoiceData)
             return tablesData, invoiceData
     
 def renderCommonForm(docName, docType):
@@ -58,7 +56,6 @@ def renderCommonForm(docName, docType):
     formData = {
         "docRequisite": form.add_combobox(frameKey,"Реквизит",requisites, 0,0),
         "clientName" : form.add_input(frameKey, "Имя клиента",1,0, text_var=invoiceData["buyer"]),
-        "tax": form.add_input(frameKey,"Налог %",4, 0,isNum=True, text_var=0, width=15),
         "isPrint": form.add_checkbox(frameKey, "Поставить печать", 5, 1, True),
         "docNum": invoiceData["invoice_num"],
     }

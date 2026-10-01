@@ -17,21 +17,17 @@ def choose_file():
                 for i, page in enumerate(pdf.pages):
                     table = page.extract_table()
                     tablesData.append(table)
-                    for row in tablesData[i]:
-                        value, rest = row[2].split(" ", 1)
-                        row[3] = value
-                        row[2] = rest
                     textData += page.extract_text()
-            total = re.search(r"ИТОГО:\s*([\d\s,]+)", textData).group(1).strip()
-
+            total = tablesData[0][-1]
+            del tablesData[0][-1]
             invoiceData = {
                 "invoice_num": re.search(r'\*(\d+)', textData).group(1),
-                "buyer": re.search(r'ПОКУПАТЕЛЬ\s*(.+?)\s*________________', textData).group(1).strip(),
-                "qty": total.split(" ", 1)[0],
-                "summ": total.split(" ", 1)[1], 
+                "buyer": re.search(r"Покупатель:\s*(.+)", textData).group(1).strip(),
+                "qty": total[2],
+                "summ": total[4],
             }
-            
             print(tablesData)
             print(invoiceData)
             
-choose_file()
+a = "51 850.00"
+print(a[:-3].replace(" ",""))

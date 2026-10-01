@@ -5,11 +5,10 @@ kp_title = [
     'Умуш Аскар'
 ]
 
-def createCommercialDoc(doc, data, signPath, propsIndex, loadJson, date, months, qty, summ,tablesData):
+def createCommercialDoc(doc, data, signPath, propsIndex, loadJson, date, months, qty, sum,pageSum, tablesData):
     props = loadJson('data/JSON/kpProps.json')['props'][propsIndex]
     props = props.split("~")
     props.reverse()
-    taxAmount = data["tax"].get()
     
     for index, str in enumerate(props):
         text_width = doc.get_string_width(text=str, font='Arial-Thick', font_size=9)
@@ -31,10 +30,9 @@ def createCommercialDoc(doc, data, signPath, propsIndex, loadJson, date, months,
     doc.add_image(path="data\img\emin.png", x=70, y=720, width=140, height=55)
     doc.add_stroke(x=50, y=690, x2=700, y2=690, weight=3)
     
-    add_product_tables(doc, y=500, tablesData=tablesData, qty=qty, summ=summ)
-    taxSumm = round(float(taxAmount) / 100.0 * float(summ)) if len(taxAmount) > 0 else 0
-    doc.add_text(x=80, y=170, text=f'Итого настоящего коммерческого предложения составило: {int(summ) + taxSumm} сом')
-    doc.add_text(x=80, y=150, text=f'({convertNum2Words(int(summ) + taxSumm)}) сом')
+    add_product_tables(doc, y=500, tablesData=tablesData, qty=qty, summ=pageSum)
+    doc.add_text(x=80, y=170, text=f'Итого настоящего коммерческого предложения составило: {pageSum} сом')
+    doc.add_text(x=80, y=150, text=f'({convertNum2Words(int(sum))}) сом')
     doc.add_text(x=90, y=70, text="С уважением", font_size=11)
     doc.add_text(x=90, y=55, text=kp_title[propsIndex], font_size=11)
     

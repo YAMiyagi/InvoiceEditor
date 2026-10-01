@@ -43,7 +43,8 @@ def createPDF(data,docName, docType, tablesData, invoiceData):
         "date":date,
         "months":months,
         "qty":invoiceData["qty"],
-        "summ":invoiceData["summ"],
+        "sum":invoiceData["sum"][:-3].replace(" ",""),
+        "pageSum": invoiceData["sum"],
         "tablesData":tablesData
     }
     

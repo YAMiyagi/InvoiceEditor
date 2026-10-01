@@ -6,16 +6,13 @@ from reportlab.pdfbase import pdfmetrics
 def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_height:int=11, font_size:int=8, tablesData:list=None, qty:str=None, summ:str=None):
         thick_font = "Arial-Thick"
         font = "Arial"
-        col_widths=[30, 100, 200, 30, 70, 70]
+        col_widths=[30, 300, 30, 70, 70]
         y_offset = 0
         height = 0
         if col_widths is None:
-            col_widths = [100] * len(tablesData[0])
-        for i, row in enumerate(tablesData):
-            print("row = ", row[i][1])
-            print("col-width =", col_widths)
-            height = rect_height * math.ceil(pdfmetrics.stringWidth(row[i][1], font, font_size) / (col_widths[2] - (rect_height + font_size + 10)))
-            print(f"y - y_offset - height = {y - y_offset - height}")
+            col_widths = [100] * len(tablesData[0][0])
+        for i, row in enumerate(tablesData[0]):
+            height = rect_height * math.ceil(pdfmetrics.stringWidth(row[1], font, font_size) / (col_widths[1] - (rect_height + font_size + 10)))
             if y - y_offset - height < 20: doc.current_page += 1; doc.show_page(); y_offset = 0; y = 800
             for j, cell in enumerate(row):
                 doc.add_table(
@@ -29,25 +26,25 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
                 )
             y_offset += height
         doc.add_table(
-            x + sum(col_widths[:3]),
+            x + sum(col_widths[:2]),
             y - y_offset - 4,
-            width=col_widths[3],
+            width=col_widths[2],
             height=rect_height,
             text=qty,
             font=thick_font,
-            font_size=9,
+            font_size=font_size,
         )
         doc.add_table(
             x + sum(col_widths[:-1]),
             y - y_offset - 4,
             width=col_widths[-1],
             height=rect_height,
-            text=f"{summ},00",
+            text=summ,
             font=thick_font,
             font_size=font_size,
         )
         doc.add_text(
-            x + sum(col_widths[:2]) - 30,
+            x + sum(col_widths[:2]) - 60,
             y - y_offset - 13,
             text_area_width= col_widths[2],
             text_align= "rigth",
