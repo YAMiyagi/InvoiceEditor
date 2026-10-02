@@ -39,7 +39,7 @@ def choose_file():
             buyer = re.search(r"Покупатель:\s*(.+)", textData).group(1).strip()
             invoiceData = {
                 "invoice_num": re.search(r'\*(\d+)', textData).group(1),
-                "buyer": buyer if buyer[0] != "№" else " ",
+                "buyer": buyer.replace("+996", "") if buyer[0] != "№" else " ",
                 "qty": total[2],
                 "sum": total[4],
             }

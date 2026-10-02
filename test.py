@@ -14,20 +14,19 @@ def choose_file():
             tablesData = []
             textData = ""
             with pdfplumber.open(f"{file_path}") as pdf:
-                for i, page in enumerate(pdf.pages):
+                for page in pdf.pages:
                     table = page.extract_table()
                     tablesData.append(table)
                     textData += page.extract_text()
-            total = tablesData[0][-1]
+            tablesData[0][0][-1] = "Сумма"
+            tablesData[0][0][-2] = "Цена"
+            total = tablesData[len(tablesData) -1][-1]
             del tablesData[0][-1]
+            buyer = re.search(r"Покупатель:\s*(.+)", textData).group(1).strip()
             invoiceData = {
                 "invoice_num": re.search(r'\*(\d+)', textData).group(1),
-                "buyer": re.search(r"Покупатель:\s*(.+)", textData).group(1).strip(),
+                "buyer": buyer if buyer[0] != "№" else " ",
                 "qty": total[2],
-                "summ": total[4],
+                "sum": total[4],
             }
-            print(tablesData)
-            print(invoiceData)
             
-a = "51 850.00"
-print(a[:-3].replace(" ",""))
