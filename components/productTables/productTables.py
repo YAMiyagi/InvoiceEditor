@@ -13,7 +13,7 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
             col_widths = [100] * len(tablesData[0][0])
         for i, row in enumerate(tablesData[0]):
             height = rect_height * math.ceil(pdfmetrics.stringWidth(row[1], font, font_size) / (col_widths[1] - (rect_height + font_size + 10)))
-            if y - y_offset - height < 20: doc.current_page += 1; doc.show_page(); y_offset = 0; y = 800
+            if y - y_offset - height < 20: doc.add_page(); y_offset = 0; y = 800
             for j, cell in enumerate(row):
                 doc.add_table(
                     x + sum(col_widths[:j]),
@@ -52,4 +52,4 @@ def add_product_tables(doc, x:int=50, y:int=550, col_widths:list=None, rect_heig
             font=thick_font,
             font_size=font_size,
         )
-        if y - y_offset - height < 200: doc.current_page += 1; doc.show_page()
+        if y - y_offset - height < 200: doc.add_page()

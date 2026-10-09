@@ -7,6 +7,8 @@ from reportlab.pdfbase.ttfonts import TTFont
 
 pdfmetrics.registerFont(TTFont('Arial-Thick', "data/fonts/G_ari_bd.TTF"))
 pdfmetrics.registerFont(TTFont('Arial', 'data/fonts/arial.ttf'))
+pdfmetrics.registerFont(TTFont('LiberationSerif-Bold', 'data/fonts/LiberationSerif-Bold.ttf'))
+pdfmetrics.registerFont(TTFont('LiberationSerif', 'data/fonts/LiberationSerif-Regular.ttf'))
 
 class DocGenerator():
     def __init__(self, path:str):
@@ -70,4 +72,12 @@ class DocGenerator():
         
     def show_page(self):
         self.__canvas.showPage()
+        
+    def add_page(self):
+        self.current_page += 1
+        self.show_page()
+        
             
+            
+            
+      
