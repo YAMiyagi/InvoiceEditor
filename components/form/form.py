@@ -32,13 +32,14 @@ def choose_file():
                     table = page.extract_table()
                     tablesData.append(table)
                     textData += page.extract_text()
+            print(textData)
             tablesData[0][0][-1] = "Сумма"
             tablesData[0][0][-2] = "Цена"
             total = tablesData[len(tablesData) -1][-1]
             del tablesData[0][-1]
             buyer = re.search(r"Покупатель:\s*(.+)", textData).group(1).strip()
             invoiceData = {
-                "invoice_num": re.search(r'\*(\d+)', textData).group(1),
+                "invoice_num": re.search(r'№\s*(\d+)', textData).group(0),
                 "buyer": buyer.replace("+996", "") if buyer[0] != "№" else " ",
                 "qty": total[2],
                 "sum": total[4],

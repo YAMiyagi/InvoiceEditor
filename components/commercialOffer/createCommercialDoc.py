@@ -19,7 +19,7 @@ def createCommercialDoc(doc, data, signPath, propsIndex, loadJson, date, months,
     doc.add_text(
         x=60, 
         y=670, 
-        text=f"Исходный документ №{data['docNum']} от {date['currDay']} {months[date['currMonth'] - 1]} {date['currYear']}г.",
+        text=f"Исходный документ {data['docNum']} от {date['currDay']} {months[date['currMonth'] - 1]} {date['currYear']}г.",
         font_size=10
     )
     doc.add_text(x=175, y=620, text="Коммерческое предложение", font="Arial-Thick", font_size = 15)

@@ -64,6 +64,6 @@ def createInvoiceDoc():
     doc.save_page()
     doc.show_page()
     
-createInvoiceDoc()
-open_pdf("C:/Users/Абиль Абдырахманов/Desktop/Новая папка/test.pdf")
+# createInvoiceDoc()
+# open_pdf("C:/Users/Абиль Абдырахманов/Desktop/Новая папка/test.pdf")
 
