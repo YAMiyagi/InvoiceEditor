@@ -37,7 +37,8 @@ def choose_file():
             tablesData[0][0][-2] = "Цена"
             total = tablesData[len(tablesData) -1][-1]
             del tablesData[0][-1]
-            buyer = re.search(r"Покупатель:\s*(.+)", textData).group(1).strip()
+            print(re.search(r"Покупатель:\s*(.+)", textData))
+            buyer = re.search(r'Покупатель:\s*(.*?)\s*\+?\d{9,}', textData).group(1).strip()
             invoiceData = {
                 "invoice_num": re.search(r'№\s*(\d+)', textData).group(0),
                 "buyer": buyer.replace("+996", "") if buyer[0] != "№" else " ",
